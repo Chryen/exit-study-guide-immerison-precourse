@@ -15,16 +15,56 @@
 
 const pureShuffle = array => {
     // your code here
+    array = [...array]; // comment entire line for dirtyShuffle
+    for (let i = 0; i < array.length - 1; i++) {
+        let j = Math.floor(Math.random() * (i + 1));
+        let temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+        // [array[j], array[i]] = [array[i], array[j]] 
+    }
+    return array;
+};
+
+const dirtyShuffle = array => {
+    // your code here
+    // array = [...array]; // comment entire line for dirtyShuffle
+    for (let i = 0; i < array.length - 1; i++) {
+        let j = Math.floor(Math.random() * (i + 1));
+        let temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+        // [array[j], array[i]] = [array[i], array[j]] 
+    }
+    return array;
 };
 
 var isPalindrome = (string) => {
     // your code here
+    if (string === '') {
+        return undefined;
+    } else if (string.toLowerCase() === string.split('').reverse().join('').toLowerCase()) {
+        return true;
+    } else {
+        return false;   
+    }
 }
 
-const mergeObjects = obj => {
+const mergeObjects = (...obj) => {
     // your code here
+    return Object.assign({}, ...obj);
 };
 
+const semiMergeObjects = (obj, ...objs) => {
+    for (let i = 0; i < objs.length; i++) {
+        for (let key in objs[i]) {
+            if (!obj[key]) {
+                obj[key] = objs[i][key]; 
+            }
+        }
+    }
+    return obj;
+};
 
 
 //////////////////////////////////////////////////////
@@ -33,14 +73,35 @@ const mergeObjects = obj => {
 
 var replaceValuesInObj = (obj, value, newValue) => {
     // your code here
+    for (let key in obj) {
+        if (typeof obj[key] === 'object') {
+            replaceValuesInObj(obj[key], value, newValue);
+        } else {
+            obj[key] = obj[key].replace(value, newValue);
+        }
+    }
+    return obj;
 };
 
 var addKeysToExistingObj = (obj, newKey, newValue) => {
     // your code here
+    for (let key in obj) {
+        if (typeof obj[key] === 'object') {
+            addKeysToExistingObj(obj[key], newKey, newValue);
+        } else {
+            obj[newKey] = newValue;
+        }
+    }
+    return obj;
 };
 
 var map = (arr, func) => {
     // your code here
+    if (!arr.length) {
+        return [];
+    } else {
+        return [func(arr[0])].concat(map(arr.slice(1), func));
+    }
 }
 
 
@@ -64,12 +125,20 @@ var comedians = [
 /* Solve by chaining native methods of map and filter only */
 var comediansFilteredAndMapped = (comedians) => {
     // Your code here
-
+    return comedians.filter(comedian => {
+        return comedian.begin >= 2005 && comedian.actor.length > 10;
+    }).map(comedian => {
+        return { appearanceNumber: '#' + comedian.number, name: comedian.actor, seasonsActive: comedian.end - comedian.begin + 1 };
+    });
 };
 
 var comedianNamesFilteredAndMapped = (comedians) => {
     // Your code here
-
+    return comedians.filter(comedian => {
+        return comedian.begin >= 2005 && comedian.actor.length > 10;
+    }).map(comedian => {
+        return comedian.actor;
+    });
 };
 
 
@@ -78,12 +147,22 @@ var comedianNamesFilteredAndMapped = (comedians) => {
 /* Solve by using native method of reduce only */
 var comediansReduced1 = (comedians) => {
     // Your code here
-
+    return comedians.reduce((acc, comedian) => {
+        if (comedian.begin >= 2005 && comedian.actor.length > 10) {
+            acc.push({ appearanceNumber: '#' + comedian.number, name: comedian.actor, seasonsActive: comedian.end - comedian.begin + 1 });
+        }
+        return acc;
+    }, [])
 };
 
 var comediansReduced2 = (comedians) => {
     // Your code here
-
+    return comedians.reduce((acc, comedian) => {
+        if (comedian.begin >= 2005 && comedian.actor.length > 10) {
+            acc.push(comedian.actor);
+        }
+        return acc;
+    }, [])
 };
 
 

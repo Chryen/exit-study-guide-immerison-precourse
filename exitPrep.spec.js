@@ -37,6 +37,26 @@ describe('1) pureShuffle', () => {
 
 });
 
+describe('1b) dirtyShuffle', () => {
+    it('should modify the original object', function () {
+        const numbers = [4, 5, 6];
+        const shuffled = dirtyShuffle(numbers).sort();
+        expect(shuffled).to.equal(numbers);
+        expect(numbers).to.eql([4, 5, 6]);
+    });
+    it('should have the same elements as the original object', function () {
+        const numbers = [4, 5, 6];
+        const shuffled = dirtyShuffle(numbers).sort();
+        expect(shuffled).to.eql([4, 5, 6]);
+    });
+    it('should not be in the same order as the original object', function () {
+        const numbers = [4, 5, 6, 7, 8, 9, 10];
+        const shuffled = dirtyShuffle(numbers);
+        // This test will fail 1/9! times
+        expect(shuffled).to.not.eql([4, 5, 6, 7, 8, 9, 10]);
+    });
+});
+
 describe('2) isPalindrome', () => {
 
     it('should return boolean', function () {
@@ -82,6 +102,31 @@ describe('3) mergeObjects', function() {
         expect(output.hasOwnProperty('pants')).to.equal(true);
         expect(output.hasOwnProperty('apple')).to.equal(true);
         expect(output.spinach).to.equal('stain');
+    });
+});
+
+describe('3b) semiMergeObjects', function() {
+    const input = {
+        banana: 'yellow',
+        apple: 'red',
+        carrot: 'purple',
+        spinach: 'green',
+    },
+    input2 = {
+        shoe: 'leather',
+        sweater: 'cashmere blend',
+        pants: 'cotton twill',
+        bag: 'canvas',
+        spinach: 'stain',
+    };
+    const output = semiMergeObjects(input, input2);
+    it('should return an object', function() {
+        expect(typeof (semiMergeObjects(input, input2))).to.equal('object');
+    });
+    it('should return an object with the appropriate key/value pairs', function (){
+        expect(output.hasOwnProperty('pants')).to.equal(true);
+        expect(output.hasOwnProperty('apple')).to.equal(true);
+        expect(output.spinach).to.equal('green');
     });
 });
 
